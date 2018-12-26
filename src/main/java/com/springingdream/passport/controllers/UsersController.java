@@ -46,12 +46,6 @@ public class UsersController {
         return pack(findOrDie(uid));
     }
 
-    @GetMapping(path = "/{uid}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
-    public List<User> list(@PathVariable Long uid) {
-
-        return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
-    }
-
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
     public Resource<User> insert(@RequestBody User user) {
         return pack(repository.save(user));
