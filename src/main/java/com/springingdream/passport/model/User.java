@@ -2,7 +2,6 @@ package com.springingdream.passport.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,10 +16,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long uid;
 
-    @NonNull
     private String login;
 
-    @NonNull
     private String passwordHash;
 
     private String imageUrl;

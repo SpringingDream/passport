@@ -26,9 +26,9 @@ public class UsersController {
 
     @PostMapping(path = "/auth", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
     public Resource<User> auth(@RequestBody User user) {
-        User u = repository.findByLogin(user.getLogin()).orElseThrow(() -> new RuntimeException("Not registered"));
+        User u = repository.findByLogin(user.getLogin()).orElseThrow(() -> new UserNotFoundException(0L));
         if (!u.getPasswordHash().equals(user.getPasswordHash()))
-            throw new RuntimeException("Wrong password");
+            throw new UserNotFoundException(0L);
         return pack(u);
     }
 
