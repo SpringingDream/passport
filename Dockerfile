@@ -13,5 +13,5 @@ RUN ["mvn", "package", "-Dmaven.test.skip=true", "-U"]
 
 FROM openjdk:11
 COPY --from=0 /app/target/marketplace-passport.jar /app/marketplace-passport.jar
-CMD ["java","-jar","/app/marketplace-passport.jar"]
+CMD bash -c 'source ./entrypoint.sh && java -jar /app/marketplace-passport.jar'
 EXPOSE 10000
