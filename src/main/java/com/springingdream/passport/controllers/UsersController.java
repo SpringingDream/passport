@@ -20,6 +20,14 @@ public class UsersController {
         this.assembler = assembler;
     }
 
+    @PostMapping(path = "/auth", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
+    public Resource<User> auth(@RequestBody User user) {
+        User u = repository.findByLogin(user.getLogin()).orElseThrow(() -> new RuntimeException("Not registered"));
+        if (!u.getPasswordHash().equals(user.getPasswordHash()))
+            throw new RuntimeException("Wrong password");
+        return pack(u);
+    }
+
     @GetMapping(path = "/{uid}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
     public Resource<User> get(@PathVariable Long uid) {
         return pack(findOrDie(uid));
