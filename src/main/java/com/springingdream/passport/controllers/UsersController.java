@@ -8,6 +8,10 @@ import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 @RestController
 @RequestMapping(path = "/api/passport")
 public class UsersController {
@@ -28,9 +32,24 @@ public class UsersController {
         return pack(u);
     }
 
+    @GetMapping
+    public List<User> list() {
+        return StreamSupport.stream(repository.findAll().spliterator(), false).peek(u -> {
+            u.setLogin(null);
+            u.setPasswordHash(null);
+            u.setImageUrl(null);
+        }).collect(Collectors.toList());
+    }
+
     @GetMapping(path = "/{uid}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
     public Resource<User> get(@PathVariable Long uid) {
         return pack(findOrDie(uid));
+    }
+
+    @GetMapping(path = "/{uid}", produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
+    public List<User> list(@PathVariable Long uid) {
+
+        return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, "application/hal+json"})
